@@ -1,0 +1,106 @@
+{% extends 'temp_install.html'%}
+
+{% block RenderBody %}
+
+    <div id="h_top" class="container" style="width: 900px;height: 470px;overflow: auto;">
+        <blockquote class="blockquote-reverse">
+          <p style="color: #528CE0">请填写需要登录的服务器主机信息</p>
+          <footer>可以点击添加按钮增加主机</footer>
+        </blockquote>
+        <div id="td_list" >
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 220px">主机ip</th>
+                        <th style="width: 230px">主机密码</th>
+                        <th style="width: 250px">主机名</th>
+                        <th>
+                        <div class="c1">
+                            <button type="button" class="btn btn-success btn-sm" onclick="add_tr(this);">点击添加主机<span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="add_tbody">
+                    <tr class="data_tr">
+                        <td>
+                            <input id="ip" type="text" class="form-control input-sm"  placeholder="ip">
+                        </td>
+                        <td>
+                            <input id="pw" type="text" class="form-control input-sm"  placeholder="password">
+                        </td>
+                        <td>
+                            <input id="host" type="text" class="form-control input-sm"  placeholder="hostname">
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="info" style="width: 120px;position: fixed;top: 150px;right: 50%;color: red" class="hied">
+        <div style="position: absolute;top:30%;right: 20%" onclick="db();"> 请填写主机名 </div>
+    </div>
+{% end %}
+
+
+{% block JavaScript %}
+    <script>
+        function add_tr() {
+            var passwd_data = $("#add_tbody tr").last().find("#pw").val();
+            var ip_data = $("#add_tbody tr").last().find("#ip").val();
+            if($("#add_tbody tr").last().find("#host").val() == ''){
+                $("#info").removeClass("hied");
+                return;
+            }
+            $("#info").addClass("hied");
+            if(ip_data.search(/[0-9]+.[0-9]+.[0-9]+./) == 0 ) {
+                var ip_data = ip_data.match(/[0-9]+.[0-9]+.[0-9]+./)[0];
+            }else{
+                var ip_data = '';
+            }
+            $("#add_tbody").append('<tr class="data_tr">'+
+                        '<td>'+
+                            '<input id="ip" type="text" class="form-control input-sm"  placeholder="ip">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input id="pw" type="text" class="form-control input-sm"  placeholder="password">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input id="host" type="text" class="form-control input-sm"  placeholder="hostname">'+
+                        '</td>'+
+                    '</tr>')
+            $("#add_tbody tr").last().find("#pw").val(passwd_data);
+            $("#add_tbody tr").last().find("#ip").val(ip_data);
+            $('#h_top').scrollTop( $('#h_top')[0].scrollHeight );
+        }
+        function data_format() {
+            var data_list = new Array();
+            $("input").each(function (ccc) {
+
+                var data = $("input")[ccc].value;
+                if(data){
+                    data_list.push(data);
+                    console.log(data_list);
+                }
+
+            });
+            $.ajax({url: "/install",
+                  type: "POST",
+                  dataType: "JSON",
+                  data: {'message':JSON.stringify(data_list)},
+                  success: function(result){
+                      if(result.status){
+                         window.location.href="/install/app_ip";
+                   }
+                  }
+                  });
+
+
+        }
+
+    </script>
+{% end %}
+</body>
+</html>

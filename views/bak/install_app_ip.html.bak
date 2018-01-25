@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>北理工新源部署平台(测试版)</title>
+
+
+    <link href="{{static_url("bootstrap/dist/css/bootstrap.min.css")}}" rel="stylesheet">
+    <script src="{{static_url("jquery-3.0.0.js")}}"></script>
+    <script src="{{static_url("bootstrap/dist/js/bootstrap.min.js")}}"></script>
+</head>
+<body>
+    <div>
+        <h2 style="padding-left: 20px">车企部署平台 <small>程序配置文件引导</small></h2>
+        <hr/>
+    </div>
+    <div class="container" style="width: 900px;height: 470px;overflow: auto;">
+        <blockquote class="blockquote-reverse">
+          <p style="color: #528CE0">请填写所部署的各个集群地址</p>
+          <footer>只需要填写集群地址ip 不用填写端口，多ip之间用逗号分隔</footer>
+        </blockquote>
+        <div >
+            <div class="input-group" style="padding-top: 50px;">
+                <div class="input-group-addon" style="width: 150px">redis(本地)</div>
+                <input id="local_redis" type="text" class="form-control"  placeholder="web使用的redis" style="width: 500px">
+            </div>
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">redis(集群)</div>
+                <input id="cluse_redis" type="text" class="form-control" placeholder="集群redis的ip" style="width: 500px">
+            </div>
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">mysql(地址)</div>
+                <input id="mysql" type="text" class="form-control" placeholder="mysql的ip只需要写主" style="width: 500px">
+            </div>
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">zookeeper(集群)</div>
+                <input id="zookeeper" type="text" class="form-control" placeholder="zookeeper" style="width: 500px">
+            </div>
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">kafka(集群)</div>
+                <input id="kafka" type="text" class="form-control" placeholder="所有kafka的ip地址" style="width: 500px">
+            </div>
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">flume(集群)</div>
+                <input id="flume" type="text" class="form-control"  placeholder="所有flume的ip地址" style="width: 500px">
+            </div>
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">hbase(集群)</div>
+                <input id="hbase" type="text" class="form-control"  placeholder="所有hbase的ip地址" style="width: 500px">
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="container" style="width: 900px;height: 50px;">
+        <div style="padding-left: 750px">
+            <button type="button" class="btn btn-success" onclick="data_format(this);">（提交）下一步</button>
+        </div>
+    </div>
+
+    <script>
+        function add_tr() {
+            $("#add_tbody").append('<tr class="data_tr">'+
+                        '<td>'+
+                            '<input type="text" class="form-control input-sm"  placeholder="ip">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" class="form-control input-sm"  placeholder="password">'+
+                        '</td>'+
+                        '<td>'+
+                            '<input type="text" class="form-control input-sm"  placeholder="hostname">'+
+                        '</td>'+
+                    '</tr>')
+        }
+        function data_format() {
+            var data_dic = {
+                'local_redis':$('#local_redis').val(),
+                'cluse_redis':$('#cluse_redis').val(),
+                'mysql':$('#mysql').val(),
+                'kafka':$('#kafka').val(),
+                'flume':$('#flume').val(),
+                'hbase':$('#hbase').val(),
+                'zookeeper':$('#zookeeper').val()
+            };
+            $.ajax({url: "/install/app_ip",
+                  type: "POST",
+                  dataType: "JSON",
+                  data: data_dic,
+                  success: function(result){
+                      if(result.status){
+                         window.location.href="/install/start";
+                         console.log(data_dic);
+                   }
+                  }
+                  });
+            console.log(data_dic);
+            
+
+        }
+
+    </script>
+</body>
+</html>

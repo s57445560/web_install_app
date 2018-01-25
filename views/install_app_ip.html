@@ -1,0 +1,52 @@
+{% extends 'temp_install.html'%}   
+
+{% block RenderBody %}
+    <div class="container" style="width: 900px;height: 470px;overflow: auto;">
+        <blockquote class="blockquote-reverse">
+          <p style="color: #528CE0">请填写所部署的各个集群地址</p>
+          <footer>只需要填写集群地址ip 不用填写端口，多ip之间用逗号分隔</footer>
+        </blockquote>
+        <div >
+            <div class="input-group" style="padding-top: 50px;">
+            </div>
+            {% for line in app_install_config %}
+            <div class="input-group" style="padding-top: 5px">
+                <div class="input-group-addon" style="width: 150px">{{line[0]}}</div>
+                <input id="{{line[0]}}" type="text" class="form-control" placeholder="{{line[1]}}" style="width: 500px">
+            </div>
+            {% end %}
+        </div>
+    </div>
+
+{% end %}
+
+
+{% block JavaScript %}
+    <script>
+        function data_format() {
+            var data_dic = {
+                {% for line in app_install_config %}
+                '{{line[0]}}':$('#{{line[0]}}').val(),
+                {% end %}
+            };
+            $.ajax({url: "/install/app_ip",
+                  type: "POST",
+                  dataType: "JSON",
+                  data: {'message': JSON.stringify(data_dic)},
+                  success: function(result){
+                      if(result.status){
+                         window.location.href="/install/start";
+                         console.log(data_dic);
+                   }
+                  }
+                  });
+            console.log(data_dic);
+            
+
+        }
+
+    </script>
+
+{% end %}
+</body>
+</html>

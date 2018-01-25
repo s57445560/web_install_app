@@ -1,0 +1,49 @@
+# supp ----> alarmservice  saveservice  synservice
+# web  ----> admin  duboo  openservice
+# comm ----> term_gb_svr  plat_gb_svr  plat_gb_cli
+# mid  ----> nginx redis(集群)
+# role ----> m (admin 程序的 master) s (admin 程序的 slave) master写上面
+
+[10.0.1.2]
+
+role = m
+admin = web
+duboo = web
+openservice = web
+nginx = mid
+
+[10.0.1.3]
+
+role = s
+admin = web
+duboo = web
+openservice = web
+nginx = mid
+
+[10.0.1.4]
+
+term_gb_svr = comm
+plat_gb_svr = comm
+plat_gb_cli = comm
+redis = mid
+
+
+[10.0.1.5]
+
+term_gb_svr = comm
+plat_gb_svr = comm
+plat_gb_cli = comm
+redis = mid
+
+[10.0.1.6]
+
+alarmservice = supp
+saveservice = supp
+synservice = supp
+
+[10.0.1.6]
+
+alarmservice = supp
+saveservice = supp
+synservice = supp
+

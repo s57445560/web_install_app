@@ -1,0 +1,858 @@
+#!/bin/bash
+#to write sunyang
+#This script is a modified configuration file.
+#bash config_c.sh [app] [path] [redis-m-192.168.0.1] [redis-s-192.168.0.2] [nginx-n-192.168.0.109] [oracle-a,oracle-b,oracle-c]
+
+mccproxy_port=9000
+monitor_port=9003
+mreport_port=9004
+information_port=9001
+statistics_port=9002
+trackfileser_port=9040
+MobileServer_port=9006
+RestSer_port=9004
+webServer_port=9006
+
+
+
+bsapp (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^monitorSerHessian.serverName=\).*/\1'${nginx_a}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^monitorSerHessian.httpPort=\).*/\1'${monitor_port}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^informationSerHessian.serverName=\).*/\1'${nginx_a}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^informationSerHessian.httpPort=\).*/\1'${information_port}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^statisticsSerHessian.serverName=\).*/\1'${nginx_a}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^statisticsSerHessian.httpPort=\).*/\1'${statistics_port}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^webappsExcelUrl=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^travelPageUrl=http://\).*\(/lypt.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^mReportUrl=http://\).*\(/MReport.*\)#\1'${nginx_a}':'${mreport_port}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^sendCommandUrl=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^sendCommandUrl=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^sendBatchFaultCommand=\).*#\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+bfapp (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^informationSerHessian.serverName=\).*/\1'${nginx_a}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^informationSerHessian.httpPort=\).*/\1'${information_port}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^webappsExcelUrl=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^http_path_corplogo=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+bmapp (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^informationSerHessian.serverName=\).*/\1'${nginx_a}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^informationSerHessian.httpPort=\).*/\1'${information_port}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^webappsExcelUrl=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^http_path_corplogo=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^http_path_userlogo=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^clappAddressUrl=http://\).*\(/clapp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^logMonitorUrl==http://\).*\(/clapp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+clapp (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^jdbc_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^jdbc_pwd=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^jdbc_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+lypt (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+MReport (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^IP=\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+InformationSer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^trackFileSerHessian.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackFileSerHessian.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^activeMQ=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+MonitorSer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^trackFileSerHessian.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackFileSerHessian.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^activeMQ=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#/opt/\(tomcat1.*\)#/opt/web_app/\1#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^sendCommandUrl=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/monitor.properties
+
+
+}
+
+StatisticsSer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^jdbc.url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^jdbc.password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^jdbc.username=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^trackFileSerHessian.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackFileSerHessian.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+BaseInfoSer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^trackFileSerHessian.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackFileSerHessian.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+
+BfInformationSer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^trackFileSerHessian.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackFileSerHessian.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^sendCommandUrl=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/monitor.properties
+    sed -i 's#\(^sendCommandUrl=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^activeMQ=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+mccproxy (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^oracle_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^mqUrl=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+MobileApp (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^webServer.serverName=\).*/\1'${ngxin_a}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^webServer.httpPort=\).*/\1'${MobileServer_port}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^activeMQ=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^webappsExcelUrl=http://\).*\(/ReportApp.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+MobileServer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_jdbcUrl=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_username=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^activeMQ=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackServer.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackServer.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^mccAddress=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+RestSer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^jdbc_url=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^jdbc_pwd=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^jdbc_user=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^billingdatewebresturl=http://\).*\(/RestSer.*\)#\1'${nginx_a}':'${RestSer_port}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^sendCommandUrl=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+
+
+
+WebApp (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's#\(^webServer.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^webServer.httpPort=\).*#\1'${webServer_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+
+
+}
+
+
+
+WebServer (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^oracle_jdbcUrl=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_password=\).*/\1'${a_pass}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracle_username=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's#\(^webServer.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^webServer.httpPort=\).*#\1'${webServer_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's/\(^REDIS.HOST.MAIN=\).*/\1'${redis_m}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's/\(^REDIS.HOST.FROM=\).*/\1'${redis_s}'/g' ${path}/webapps/ROOT/WEB-INF/classes/redis.properties
+    sed -i 's#\(^trackServer.serverName=\).*#\1'${nginx_a}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^trackServer.httpPort=\).*#\1'${trackfileser_port}'#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+    sed -i 's#\(^mccAddress=http://\).*\(/mcc.*\)#\1'${nginx_a}'\2#g' ${path}/webapps/ROOT/WEB-INF/classes/system.properties
+
+
+}
+
+########################################################################################service
+
+alarmstatistics (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oracleUser=\).*/\1'${a_user}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+    sed -i 's/\(^oraclePass=\).*/\1'${a_passwd}'/g' ${path}/webapps/ROOT/WEB-INF/classes/jdbc.properties
+
+
+}
+
+
+
+monitorstatistics (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUser=\).*/\1'${a_user}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oraclePass=\).*/\1'${a_passwd}'/g' ${path}/conf/system.properties
+
+
+}
+
+
+
+statusstatistics (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUsername=\).*/\1'${a_user}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oraclePassword=\).*/\1'${a_passwd}'/g' ${path}/conf/system.properties
+
+
+}
+
+
+
+commandservice (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUser=\).*/\1'${a_user}'/g' ${path}/system.properties
+    sed -i 's/\(^oraclePass=\).*/\1'${a_passwd}'/g' ${path}/system.properties
+
+
+}
+
+
+filesaveservice (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUser=\).*/\1'${a_user}'/g' ${path}/system.properties
+    sed -i 's/\(^oraclePass=\).*/\1'${a_passwd}'/g' ${path}/system.properties
+
+
+}
+
+
+statusservice (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUserName=\).*/\1'${a_user}'/g' ${path}/system.properties
+    sed -i 's/\(^oraclePassword=\).*/\1'${a_passwd}'/g' ${path}/system.properties
+    sed -i 's#\(^brokerURL=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/system.properties
+
+
+}
+
+
+##########################################################################error
+syncservice (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local nginx_a=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    print $oracle_a
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/system.properties
+    sed -i 's/\(^oracleUserName=\).*/\1'${a_user}'/g' ${path}/system.properties
+    sed -i 's/\(^oraclePassword=\).*/\1'${a_passwd}'/g' ${path}/system.properties
+    sed -i 's#\(^brokerURL=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/system.properties
+
+
+}
+
+
+trackservice (){
+    local path=$1
+    local redis_m=$2
+    local redis_s=$3
+    local msg=$4
+    local oracle_a=$5
+    local mq=$6
+    local a_user=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_pass=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local a_url=`echo ${oracle_a}|awk -F'-' '{print $1}'`
+    local oracle_b=$7
+    local b_user=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_pass=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local b_url=`echo ${oracle_b}|awk -F'-' '{print $1}'`
+    local oracle_c=$8
+    local c_user=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_pass=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+    local c_url=`echo ${oracle_c}|awk -F'-' '{print $1}'`
+
+    sed -i 's/\(^redisHost=\).*/\1'${redis_m}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUrl=\).*/\1'${a_url}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oracleUser=\).*/\1'${a_user}'/g' ${path}/conf/system.properties
+    sed -i 's/\(^oraclePass=\).*/\1'${a_passwd}'/g' ${path}/conf/system.properties
+    sed -i 's#\(^brokerURL=tcp://\).*\(:61616.*\)#\1'${mq}'\2#g' ${path}/conf/system.properties
+
+    sed -i 's/\(^msgHost=\).*/\1'${msg}'/g' ${path}/conf/system.properties
+
+}
+
+###################DataAnalyzer GPS
+
+
+case "$1" in
+bsapp)
+    bsapp $2 $3 $4 $5 $6 $7
+    ;;
+bfapp)
+    bfapp $2 $3 $4 $5 $6 $7
+    ;;
+bmapp)
+    bmapp $2 $3 $4 $5 $6 $7
+    ;;
+clapp)
+    clapp $2 $3 $4 $5 $6 $7
+    ;;
+MReport)
+    MReport $2 $3 $4 $5 $6 $7
+    ;;
+InformationSer)
+    InformationSer $2 $3 $4 $5 $6 $7
+    ;;
+MonitorSer)
+    MonitorSer $2 $3 $4 $5 $6 $7
+    ;;
+StatisticsSer)
+    StatisticsSer $2 $3 $4 $5 $6 $7
+    ;;
+BaseInfoSer)
+    BaseInfoSer $2 $3 $4 $5 $6 $7
+    ;;
+BfInformationSer)
+    BfInformationSer $2 $3 $4 $5 $6 $7
+    ;;
+mccproxy)
+    mccproxy $2 $3 $4 $5 $6 $7
+    ;;
+MobileApp)
+    MobileApp $2 $3 $4 $5 $6 $7
+    ;;
+MobileServer)
+    MobileServer $2 $3 $4 $5 $6 $7
+    ;;
+RestSer)
+    RestSer $2 $3 $4 $5 $6 $7
+    ;;
+WebApp)
+    WebApp $2 $3 $4 $5 $6 $7
+    ;;
+WebServer)
+    WebServer $2 $3 $4 $5 $6 $7
+    ;;
+alarmstatistics)
+    alarmstatistics $2 $3 $4 $5 $6 $7
+    ;;
+monitorstatistics)
+    monitorstatistics $2 $3 $4 $5 $6 $7
+    ;;
+statusstatistics)
+    statusstatistics $2 $3 $4 $5 $6 $7
+    ;;
+commandservice)
+    commandservice $2 $3 $4 $5 $6 $7
+    ;;
+filesaveservice)
+    filesaveservice $2 $3 $4 $5 $6 $7
+    ;;
+statusservice)
+    statusservice $2 $3 $4 $5 $6 $7
+    ;;
+syncservice)
+    syncservice $2 $3 $4 $5 $6 $7
+    ;;
+trackservice)
+    trackservice $2 $3 $4 $5 $6 $7
+    ;;
+*)
+    echo "duile"
+    ;;
+esac

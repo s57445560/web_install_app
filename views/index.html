@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{information}}</title>
+    <style>
+        .clear-fix:after{
+            content: '.';
+            clear: both;
+            display: block;
+            visibility: hidden;
+            height: 0;
+         }
+        th{
+            padding: 0;!important
+        }
+        td{
+            padding: 0;!important;
+        }
+        ul{
+            list-style: none;
+        }
+        .hide{
+            display: none;!important;
+        }
+        .c1{
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            top: 80%;
+            left: 60%;
+            margin-top: -250px;
+            margin-left: -150px;
+            z-index: 10;
+            padding: 9px;
+        }
+        .bb{
+            background-image: url({{static_url('old-paper.jpg')}});
+            background-size:100%;
+            background-repeat: no-repeat
+        }
+
+
+
+    </style>
+    <link href="{{static_url("bootstrap/dist/css/bootstrap.min.css")}}" rel="stylesheet">
+    <script src="{{static_url("jquery-3.0.0.js")}}"></script>
+    <script src="{{static_url("bootstrap/dist/js/bootstrap.min.js")}}"></script>
+</head>
+<body>
+    <div id="c2" class="hide" style="background-color: black;position: fixed;top: 0;left: 0;bottom: 0;right: 0;opacity: 0.3;z-index:5;">
+    </div>
+    <div id="c1" class="c1 hide"><span class="glyphicon glyphicon-refresh btn-lg"></span></div>
+
+    <div  style="background-color: mintcream;height: 60px;width:100%" class="bb" >
+        <h3 class="text-error" style="font-weight:bold;;padding-left: 30px;margin-top: 0;text-align: left;padding-top: 20px;color:white">{{information}}</h3>
+    </div>
+
+    <hr style="margin: 0;margin-bottom: 3px;"/>
+
+    <div class="clear-fix">
+        <div style="width: 15%;height: 400px;float: left;margin-right:0.5%;border:1px solid #96c2f1;border-radius:5px;overflow:auto;" class="bg-info">
+            <div class="btn-danger">
+            <span class="glyphicon glyphicon-blackboard" style="padding:0;margin:0;padding-left:20px;"> 当前录入主机</span>
+             </div>
+            <ul style="margin-top: 20px">
+                {% for ip in ip_status %}
+                {% if ip_status[ip] %}
+                    <li>{{ip}} <span class="glyphicon glyphicon-ok"></span></li>
+                {%else%}
+                    <li>{{ip}} <span class="glyphicon glyphicon-remove"></span></li>
+                {% end %}
+                {% end %}
+            </ul>
+        </div>
+        <div class="container" style="width: 84.5%;height: 400px;background-color: whitesmoke;padding: 0;float: left;">
+            <div style="height: 20px;margin: 0;padding: 0;border-radius:5px 5px 0 0" class="btn-success">
+                <p style="padding-left: 60px;margin: 0">程序输出</p>
+            </div>
+            <div id="log" style="height: 380px;overflow: auto;border:1px solid #96c2f1;background:#eff7ff;border-radius:0 0 5px 5px">
+                {% for i in message_log %}
+                <p>{{i}}</p>
+                {% end %}
+            </div>
+
+        </div>
+    </div>
+    <div style="margin-top: 5px">
+        <div class="clear-fix" style="line-height: 30px;" >
+            <div style="float:left;width:210px">
+            <!-- <span style="color:red">当前执行:</span><span class="btn-success" id="new_log"></span> -->
+            <span>&nbsp</span>
+            <span class="btn-success" style="border-radius: 5px;" id="new_log"></span>
+            </div>
+            <div style="float:left;width:300px;margin-right:10px;border:1px solid #96c2f1;background:#eff7ff;border-radius:5px;">
+                <span style="color:red;font-family: NSimSun;font-weight:bold;">下一步部署动作:</span>
+                <span id={{web_config[install_num][0]}} sun_web="ok" class="btn-success" style="border-radius: 5px;">{{web_config[install_num][1]}}</span>
+            </div>
+
+            <div style="float:left;width:80px">
+                <button id="start" type="button" class="btn btn-primary btn-sm" onclick="new_ajax(this);">
+                  开始执行.
+                </button>
+            </div>
+            <div style="float:left;width:80px">
+            <button id="stop" type="button" class="btn btn-danger btn-sm action" style="display: none">
+              执行中...
+            </button>
+            </div>
+            <div style="float:left;padding-right: 10px;">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">当前配置</button>
+            
+            <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  {% for ip in host_dic.keys() %}
+                      <p style="color:red" >{{ip}}:</p>
+                      {% for key,value in app_type.items() %}
+                          {% if host_dic[ip][key] %}
+                          <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp {{value}}:{{host_dic[ip][key]}}</p>
+                          {% end %}
+                      {% end %}
+                  {% end %}
+                </div>
+              </div>
+            </div>
+            </div>
+            <div style="float:left;padding-right: 10px;">
+            <button type="button" class="btn btn-success btn-sm" onclick="check_host(this);">检查主机连通状态</button>
+            </div>
+            <div style="float:left;padding-right: 10px;">
+            <button type="button" class="btn btn-success btn-sm" onclick="jump(this);">跳过此步骤</button>
+            </div>
+
+        </div>
+    </div>
+    <div style="height: 100px;margin-top: 5px" class="clear-fix">
+        <div style="width: 49%;float: left;margin-left: 1%">
+            <table class="table table-striped" >
+                  <thead>
+                      <tr class="active">
+                         <th style="padding: 0">步骤</th>
+                         <th style="padding: 0">动作</th>
+                         <th style="padding: 0">状态</th>
+                      </tr>
+                  </thead>
+                 {% for line in web_left %}
+                 <tbody >
+                    <tr >
+                         <td  style="padding: 0">{{line[0]}}</td>
+                         <td style="padding: 0">{{line[1]}}</td>
+                         {% if install_cookie[str(line[0])] == 0 %}
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                         {% else %}
+                         <td style="padding: 0"><span class="glyphicon glyphicon-ok"></span></td>
+                         {% end %}
+                    </tr>
+                </tbody>
+                {% end %}
+            </table>
+        </div>
+        <div style="width: 1%;float: left">
+            <p></p>
+        </div>
+        <div style="width: 49%;float: left;">
+            <table class="table table-striped">
+                  <thead>
+                      <tr class="active">
+                         <th style="padding: 0">步骤</th>
+                         <th style="padding: 0">动作</th>
+                         <th style="padding: 0">状态</th>
+                      </tr>
+                  </thead>
+                {% for line in web_right %}
+                <tbody>
+                    <tr >
+                         <td style="padding: 0">{{line[0]}}</td>
+                         <td style="padding: 0">{{line[1]}}</td>
+                         {% if install_cookie[str(line[0])] == 0 %}
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                         {% else %}
+                         <td style="padding: 0"><span class="glyphicon glyphicon-ok"></span></td>
+                         {% end %}
+                    </tr>
+                </tbody>
+                {% end %}
+            </table>
+        </div>
+    </div>
+    <script>
+
+      $(function(){
+         $('#log').scrollTop( $('#log')[0].scrollHeight );
+       });
+      function sleep(numberMillis) { 
+          var now = new Date(); 
+          var exitTime = now.getTime() + numberMillis; 
+          while (true) { 
+          now = new Date(); 
+          if (now.getTime() > exitTime) 
+          return; 
+          } 
+      }
+      
+      function run_fabric(){
+        var num = $('span[sun_web="ok"]').attr('id');
+        var obj = document.getElementById("c1");
+        var obj2 = document.getElementById('c2');
+        obj.classList.remove("hide");
+        obj2.classList.remove("hide");
+        console.log('fabric... running!');
+        $.ajax({
+          url:'/run/fabric',
+          'type':'POST',
+          dataType:"JSON",
+          data:{'num':num},
+          success:function (result) {
+            if(result.status){
+                console.log('1');
+            }
+          }
+        })
+
+      }
+
+      var status_run = true;
+
+      {% if install_status %}
+      function new_ajax() {					// 发送新的消息到后台
+        if(status_run){
+            run_fabric();
+            status_run = false;
+        }
+        $('#start').css('display','none');
+        $('#stop').css('display','block');
+        $.ajax({
+          url:'/message/new',
+          'type':'POST',
+          dataType:"JSON",
+          data:{'message':'true'},
+          success:function (result) {
+            if(result){
+              if(result.status){
+                  console.log('stop');
+                  $('#start').css('display','block');
+                  $('#stop').css('display','none');
+                  sleep(2000);
+                  window.location.reload();
+                  return 'stop';
+              }else{
+                  if(result.web_status == true){
+                       console.log('falsh');
+                       window.setTimeout(new_ajax,1000); 
+                  }else{
+                  for(var i=0;i<result.messages.length;i++){
+                      $('#log').append('<p style="margin: 0;padding: 0">'+ result.messages[i] +'</p>');
+                      $('#log').scrollTop( $('#log')[0].scrollHeight );
+                      }
+                  var num = $('#log')[0].scrollHeight;
+                  if(num > 4000){
+                     var p_bq = $('#log').children();
+                     for(var i=1;i<100;i++){
+                           p_bq[i].remove();
+                       }
+                   }
+                window.setTimeout(new_ajax,1000);
+              }
+            }
+          }
+         }
+        })
+      }
+      {% end %}
+
+      function check_host(){
+        $('#new_log').text('正在检查主机连通性...')
+        $.ajax({
+          url:'/check/host',
+          'type':'POST',
+          dataType:"JSON",
+          data:{'message':'check'},
+          success:function (result) {
+            if(result.status){
+                window.location.reload();
+                $('#new_log').text('检查完毕...')
+            }
+          }
+        }) 
+     }
+
+     function jump(){
+        var num = $('span[sun_web="ok"]').attr('id');
+        $.ajax({
+          url:'/check/host',
+          'type':'GET',
+          dataType:"JSON",
+          data:{'message':num},
+          success:function (result) {
+            if(result.status){
+                window.location.reload();
+            }
+          }
+        })
+     }
+
+
+    </script>
+</body>
+</html>

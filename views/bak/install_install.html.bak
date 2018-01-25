@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>北理工新源部署平台(测试版)</title>
+
+
+    <link href="{{static_url("bootstrap/dist/css/bootstrap.min.css")}}" rel="stylesheet">
+    <script src="{{static_url("jquery-3.0.0.js")}}"></script>
+    <script src="{{static_url("bootstrap/dist/js/bootstrap.min.js")}}"></script>
+</head>
+<body>
+    <div>
+        <h2 style="padding-left: 20px">车企部署平台 <small>程序配置文件引导</small></h2>
+        <hr/>
+    </div>
+    <div class="container" style="width: 900px;height: 470px;overflow: auto;">
+        <blockquote class="blockquote-reverse">
+          <p style="color: #528CE0">请填写服务器所需要安装的程序</p>
+          <footer>勾选需要安装的应用程序</footer>
+        </blockquote>
+        <div id="td_list" >
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 220px">主机ip</th>
+                        <th style="width: 620px">安装程序</th>
+                        <th><button type="button" class="btn btn-success btn-sm" onclick="add_tr(this);">点击添加主机<span class="glyphicon glyphicon-plus"></span></button></th>
+                    </tr>
+                </thead>
+                <tbody id="add_tbody">
+                    <tr class="data_tr">
+                        <td style="padding-top: 23px;">
+                            <input type="text" class="form-control input-sm" placeholder="ip">
+                        </td>
+                        <td>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="1"> alarmservice
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="2"> saveservice
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="3"> synservice
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="4"> admin
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="5"> duboo
+                            </label>
+                            <label class="checkbox-inline" style="margin-left: 0;">
+                                <input type="checkbox" value="6" > openservice
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="7"> nginx
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="8"> term_gb_svr
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="9"> plat_gb_svr
+                            </label>
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="10"> plat_gb_cli
+                            </label>
+                            <label class="checkbox-inline" style="margin-left: 0;">
+                                <input type="checkbox" value="11"> redis(集群)
+                            </label>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr/>
+    <div class="container" style="width: 900px;height: 50px;">
+        <div style="padding-left: 750px">
+            <button type="button" class="btn btn-success" onclick="data_format(this);">（提交）下一步</button>
+        </div>
+    </div>
+
+    <script>
+        function add_tr() {
+            $("#add_tbody").append('<tr class="data_tr">'+
+                        '<td style="padding-top: 23px;">'+
+                            '<input type="text" class="form-control input-sm"  placeholder="ip">'+
+                        '</td>'+
+                        '<td>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="1"> alarmservice'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="2"> saveservice'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="3"> synservice'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="4"> admin'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="5"> duboo'+
+                            '</label>'+
+                            '<label class="checkbox-inline" style="margin-left:0;">'+
+                            '<input type="checkbox" value="6" > openservice'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="7"> nginx'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="8"> term_gb_svr'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="9"> plat_gb_svr'+
+                            '</label>'+
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="10"> plat_gb_cli'+
+                            '</label>'+
+                            '<label class="checkbox-inline" style="margin-left: 0;">'+
+                            '<input type="checkbox" value="11"> redis(集群)'+
+                            '</label>'+
+                        '</td>'+
+                    '</tr>')
+        }
+        function data_format() {
+            var data_dic={};
+            $(".data_tr").each(function (num) {
+                var ip = $(this).find("input").val();
+                var checkbox_list = new Array();
+                if(ip){
+                $(this).find("input:checkbox:checked").each(function (c_num) {
+                    checkbox_list.push($(this).val());
+                });
+                data_dic[ip] = checkbox_list;
+
+                }
+            });
+            $.ajax({url: "/install/start",
+                  type: "POST",
+                  dataType: "JSON",
+                  data: {'message':JSON.stringify(data_dic)},
+                  success: function(result){
+                      if(result.status){
+                         window.location.href="/";
+                   }
+                  }
+                  });
+            console.log(data_dic)
+        }
+
+    </script>
+</body>
+</html>

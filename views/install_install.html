@@ -1,0 +1,101 @@
+{% extends 'temp_install.html'%}
+
+{% block RenderBody %}
+    <div id="h_top" class="container" style="width: 900px;height: 470px;overflow: auto;">
+        <blockquote class="blockquote-reverse">
+          <p style="color: #528CE0">请填写服务器所需要安装的程序</p>
+          <footer>勾选需要安装的应用程序</footer>
+        </blockquote>
+        <div id="td_list" >
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 220px">主机ip</th>
+                        <th style="width: 620px">安装程序</th>
+                        <th>
+                           <div class="c1">
+                               <button type="button" class="btn btn-success btn-sm" onclick="add_tr(this);">点击添加主机<span class="glyphicon glyphicon-plus"></span>
+                               </button>
+                           <div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="add_tbody">
+                    <tr class="data_tr">
+                        <td style="padding-top: 23px;">
+                            <select class="form-control">
+                                {% for ip in data %}
+                                    <option>{{ip}}</option>
+                                {% end %}
+                            </select>
+                        </td>
+                        <td>
+                            {% for line in id_list %}
+                            <label class="checkbox-inline">
+                                <input type="checkbox" value="{{line}}"> {{app_code[str(line)][0]}}
+                            </label>
+                            {% end %}
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% end %}
+
+{% block JavaScript %}
+    <script>
+        function add_tr() {
+            $("#add_tbody").append('<tr class="data_tr">'+
+                        '<td style="padding-top: 23px;">'+
+                           '<select class="form-control">'+
+                            {% for ip in data %}
+                              '<option>{{ip}}</option>'+
+                            {% end %}
+                           '</select>'+
+                        '</td>'+
+                        '<td>'+
+                            {% for line in id_list %}
+                            '<label class="checkbox-inline">'+
+                            '<input type="checkbox" value="{{line}}"> {{app_code[str(line)][0]}}'+
+                            '</label>'+
+                            {% end %}
+                        '</td>'+
+                    '</tr>')
+                    $('#h_top').scrollTop( $('#h_top')[0].scrollHeight );
+        }
+        function data_format() {
+            var data_dic={};
+            $(".data_tr").each(function (num) {
+                var ip = $(this).find("select option:selected").val();
+                var checkbox_list = new Array();
+                if(ip){
+                $(this).find("input:checkbox:checked").each(function (c_num) {
+                    checkbox_list.push($(this).val());
+                });
+                if(checkbox_list.length != 0){
+                    data_dic[ip] = checkbox_list;
+                 }
+                }
+            });
+            $.ajax({url: "/install/start",
+                  type: "POST",
+                  dataType: "JSON",
+                  data: {'message':JSON.stringify(data_dic)},
+                  success: function(result){
+                      if(result.status){
+                         window.location.href="/";
+                   }
+                  }
+                  });
+            console.log(data_dic)
+        }
+
+    </script>
+{% end %}
+
+</body>
+</html>

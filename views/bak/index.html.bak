@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .clear-fix:after{
+            content: '.';
+            clear: both;
+            display: block;
+            visibility: hidden;
+            height: 0;
+         }
+        th{
+            padding: 0;!important
+        }
+        td{
+            padding: 0;!important;
+        }
+
+    </style>
+    <link href="{{static_url("bootstrap/dist/css/bootstrap.min.css")}}" rel="stylesheet">
+    <script src="{{static_url("jquery.js")}}"></script>
+    <script src="{{static_url("bootstrap/dist/js/bootstrap.min.js")}}"></script>
+</head>
+<body>
+    <div  style="background-color: mintcream;height: 60px;">
+        <h3 class="text-error" style="padding-left: 30px;margin-top: 0;text-align: left;padding-top: 20px;">车企部署平台</h3>
+    </div>
+            <hr style="margin: 0;margin-bottom: 3px;"/>
+    <div class="container" style="width: 1100px;height: 400px;background-color: whitesmoke;padding: 0">
+        <div style="height: 20px;margin: 0;padding: 0" class="btn-success">
+            <p style="padding-left: 60px;margin: 0">程序输出</p>
+        </div>
+        <div id="log" style="height: 380px;overflow: auto">
+
+
+        </div>
+
+    </div>
+    <div style="margin-top: 5px">
+        <div class="container" style="width: 300px;">
+            <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary btn-sm" autocomplete="off">
+              执行
+            </button>
+            <button type="button" class="btn btn-primary btn-sm">清屏幕</button>
+            <button type="button" class="btn btn-success btn-sm">检查主机连通状态</button>
+
+        </div>
+    </div>
+    <div style="height: 230px;margin-top: 5px" class="clear-fix">
+        <div style="width: 49%;float: left;margin-left: 1%">
+            <table class="table table-striped">
+                  <thead>
+                      <tr class="active">
+                         <th style="padding: 0">步骤</th>
+                         <th style="padding: 0">动作</th>
+                         <th style="padding: 0">状态</th>
+                      </tr>
+                  </thead>
+                 <tbody >
+                    <tr >
+                         <td  style="padding: 0">1</td>
+                         <td style="padding: 0">系统初始化</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr class="warning">
+                         <td style="padding: 0">2</td>
+                         <td style="padding: 0">jdk部署</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr >
+                         <td style="padding: 0">3</td>
+                         <td style="padding: 0">主机名配置</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr class="danger">
+                         <td style="padding: 0">4</td>
+                         <td style="padding: 0">cm部署</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr >
+                         <td style="padding: 0">5</td>
+                         <td style="padding: 0">cm启动</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="width: 1%;float: left">
+            <p></p>
+        </div>
+        <div style="width: 49%;float: left;">
+            <table class="table table-striped">
+                  <thead>
+                      <tr class="active">
+                         <th style="padding: 0">步骤</th>
+                         <th style="padding: 0">动作</th>
+                         <th style="padding: 0">状态</th>
+                      </tr>
+                  </thead>
+                 <tbody>
+                    <tr >
+                         <td style="padding: 0">6</td>
+                         <td style="padding: 0">web部署</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr class="warning">
+                         <td style="padding: 0">6</td>
+                         <td style="padding: 0">web部署</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr >
+                         <td style="padding: 0">7</td>
+                         <td style="padding: 0">前置机部署</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr class="danger">
+                         <td style="padding: 0">8</td>
+                         <td style="padding: 0">java程序部署</td>
+                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+      $('#myButton').on('click', function () {
+        $(this).button('loading');
+//        $(this).button('reset')
+      })
+    </script>
+</body>
+</html>
