@@ -4,7 +4,10 @@
 有什么问题可以联系我 QQ：247435333
 欢迎大家可以提出宝贵意见。
 
+使用trando 与 fabric结合
+
 ```
+[fabric 文档](http://fabric-chs.readthedocs.io/zh_CN/chs/tutorial.html "fabric 文档") 
 ---
 
 ## 安装与运行方法
@@ -25,7 +28,7 @@
 
 #### 从配置登陆服务器地址开始
 
-![image](https://github.com/s57445560/img-all/raw/master/img-all/web_install/web_install01.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install01.png)
 
 ---
 
@@ -68,7 +71,7 @@ APP_INSTALL_CONFIG = [
 ]
 ```
 
-![image](https://github.com/s57445560/img-all/raw/master/img-all/web_install/web_install02.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install02.png)
 
 
 #### 配置应用安装选择 
@@ -105,7 +108,7 @@ APP_CODE = {
     '12': ['sunyang','mid']
 }
 ```
-![image](https://github.com/s57445560/img-all/raw/master/img-all/web_install/web_install03.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install03.png)
 
 
 #### 配置查看应用的类型分配
@@ -119,13 +122,13 @@ APP_TYPE = {
 
 }
 ```
-![image](https://github.com/s57445560/img-all/raw/master/img-all/web_install/web_install04.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install04.png)
 
 #### 第一次运行任务时候点击检查主机状态
 
 可以看出那台服务器可以正常连接那台不可以，建议处理好不能正常连接的服务器后再开始任务<br>
 
-![image](https://github.com/s57445560/img-all/raw/master/img-all/web_install/web_install05.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install05.png)
 
-![image](https://github.com/s57445560/img-all/raw/master/img-all/web_install/web_install06.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install06.png)
 
