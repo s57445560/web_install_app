@@ -108,6 +108,7 @@ with open('ip.conf') as f:
             host = list_line[2]
             host_dict[ip] = host
         passwd = list_line[1]
+        check_dict[ip] = 0
         ip_dict['root@' + ip + ':22'] = passwd
         ssh_ip = 'root@' + ip
         list_user_ip.append(ssh_ip)
@@ -350,12 +351,13 @@ def host_init():
 
 @task
 def test():
-    try:
-        result = run('ifconfig')
-    except:
-        result = ''
-    if result:
-        check_dict[env.host] = 1
+    with settings(abort_on_prompts=True):
+        try:
+            result = run('ifconfig')
+        except:
+            result = ''
+        if result:
+            check_dict[env.host] = 1
 
 
 

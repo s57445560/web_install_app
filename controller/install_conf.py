@@ -27,6 +27,7 @@ import settings
 # 前台配置信息的时候的 下拉选择列表对应信息 /views/install_install.html 内对应
 APP_CODE = settings.APP_CODE
 APP_INSTALL_CONFIG = settings.APP_INSTALL_CONFIG
+INFORMATION = settings.INFORMATION
 container = {}
 ip_list = []
 
@@ -100,7 +101,7 @@ class Install_ip(tornado.web.RequestHandler):
         self.session_obj = Session(self)
 
     def get(self):
-        self.render('install_ip.html')
+        self.render('install_ip.html',information=INFORMATION)
 
     def post(self):
         status = False
@@ -135,7 +136,7 @@ class Install_app_ip(tornado.web.RequestHandler):
         self.session_obj = Session(self)
 
     def get(self):
-        self.render('install_app_ip.html',app_install_config=APP_INSTALL_CONFIG)
+        self.render('install_app_ip.html',app_install_config=APP_INSTALL_CONFIG,information=INFORMATION)
 
     def post(self):
         status = False
@@ -157,7 +158,7 @@ class Install_install(tornado.web.RequestHandler):
 
     def get(self):
         id_list = range(1,len(APP_CODE)+1)
-        self.render('install_install.html',data=ip_list,app_code=APP_CODE,id_list=id_list)
+        self.render('install_install.html',data=ip_list,app_code=APP_CODE,id_list=id_list,information=INFORMATION)
 
     def post(self):
         app_install = myconf()
