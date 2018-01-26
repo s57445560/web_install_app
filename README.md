@@ -26,7 +26,7 @@
 		# 这样可以直接进入http://192.168.2.192:9999 安装页面
 
 
-#### 从配置登陆服务器地址开始
+#### 配置登陆服务器地址
 
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install01.png)
 
@@ -39,6 +39,7 @@
 ```
 INFORMATION = "第三方项目部署平台"
 ```
+---
 
 #### 任务的设置
 
@@ -53,6 +54,7 @@ WEB_CONFIG = [
 
 ]
 ```
+---
 
 #### 安装应用时的配置文件关系填写
 
@@ -73,6 +75,7 @@ APP_INSTALL_CONFIG = [
 
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install02.png)
 
+---
 
 #### 配置应用安装选择 
 
@@ -110,6 +113,7 @@ APP_CODE = {
 ```
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install03.png)
 
+---
 
 #### 配置查看应用的类型分配
 
@@ -123,6 +127,8 @@ APP_TYPE = {
 }
 ```
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install04.png)
+
+---
 
 #### 第一次运行任务时候点击检查主机状态
 
