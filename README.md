@@ -4,7 +4,7 @@
 有什么问题可以联系我 QQ：247435333
 欢迎大家可以提出宝贵意见。
 
-使用trando 与 fabric结合
+使用torando 与 fabric结合
 
 ```
 [fabric 文档](http://fabric-chs.readthedocs.io/zh_CN/chs/tutorial.html "fabric 文档") 
