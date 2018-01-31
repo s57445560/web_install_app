@@ -98,7 +98,7 @@
             </div>
 
             <div style="float:left;width:80px">
-                <button id="start" type="button" class="btn btn-primary btn-sm" onclick="new_ajax(this);">
+                <button id="start" type="button" class="btn btn-primary btn-sm" onclick="run_fabric(this);">
                   开始执行.
                 </button>
             </div>
@@ -150,9 +150,9 @@
                          <td  style="padding: 0">{{line[0]}}</td>
                          <td style="padding: 0">{{line[1]}}</td>
                          {% if install_cookie[str(line[0])] == 0 %}
-                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                         <td style="padding: 0"><span id="id{{line[0]}}" class="glyphicon glyphicon-remove"></span></td>
                          {% else %}
-                         <td style="padding: 0"><span class="glyphicon glyphicon-ok"></span></td>
+                         <td style="padding: 0"><span id="id{{line[0]}}" class="glyphicon glyphicon-ok"></span></td>
                          {% end %}
                     </tr>
                 </tbody>
@@ -177,9 +177,9 @@
                          <td style="padding: 0">{{line[0]}}</td>
                          <td style="padding: 0">{{line[1]}}</td>
                          {% if install_cookie[str(line[0])] == 0 %}
-                         <td style="padding: 0"><span class="glyphicon glyphicon-remove"></span></td>
+                         <td style="padding: 0"><span id="id{{line[0]}}" class="glyphicon glyphicon-remove"></span></td>
                          {% else %}
-                         <td style="padding: 0"><span class="glyphicon glyphicon-ok"></span></td>
+                         <td style="padding: 0"><span id="id{{line[0]}}" class="glyphicon glyphicon-ok"></span></td>
                          {% end %}
                     </tr>
                 </tbody>
@@ -188,7 +188,7 @@
         </div>
     </div>
     <script>
-
+      var ws = new WebSocket("ws://192.168.2.192:9999/message/new");
       $(function(){
          $('#log').scrollTop( $('#log')[0].scrollHeight );
        });
@@ -200,9 +200,11 @@
           if (now.getTime() > exitTime) 
           return; 
           } 
-      }
-      
+      };
+      {% if install_status %}
       function run_fabric(){
+        $('#start').css('display','none');
+        $('#stop').css('display','block');
         var num = $('span[sun_web="ok"]').attr('id');
         var obj = document.getElementById("c1");
         var obj2 = document.getElementById('c2');
@@ -216,61 +218,49 @@
           data:{'num':num},
           success:function (result) {
             if(result.status){
+                $('#start').css('display','block');
+                $('#stop').css('display','none');
+                obj.classList.add("hide");
+                obj2.classList.add("hide");
+                $("#id" + result.id).removeClass('glyphicon-remove');
+                $("#id" + result.id).addClass('glyphicon-ok');
+                $('span[sun_web="ok"]').attr({'id':result.jump_id});
+                $('span[sun_web="ok"]').text(result.web_info);
                 console.log('1');
-            }
+            }else{
+                window.location.reload();
+             }
           }
-        })
-
-      }
-
-      var status_run = true;
-
-      {% if install_status %}
-      function new_ajax() {					// 发送新的消息到后台
-        if(status_run){
-            run_fabric();
-            status_run = false;
-        }
-        $('#start').css('display','none');
-        $('#stop').css('display','block');
-        $.ajax({
-          url:'/message/new',
-          'type':'POST',
-          dataType:"JSON",
-          data:{'message':'true'},
-          success:function (result) {
-            if(result){
-              if(result.status){
-                  console.log('stop');
-                  $('#start').css('display','block');
-                  $('#stop').css('display','none');
-                  sleep(2000);
-                  window.location.reload();
-                  return 'stop';
-              }else{
-                  if(result.web_status == true){
-                       console.log('falsh');
-                       window.setTimeout(new_ajax,1000); 
-                  }else{
-                  for(var i=0;i<result.messages.length;i++){
-                      $('#log').append('<p style="margin: 0;padding: 0">'+ result.messages[i] +'</p>');
-                      $('#log').scrollTop( $('#log')[0].scrollHeight );
-                      }
-                  var num = $('#log')[0].scrollHeight;
-                  if(num > 4000){
-                     var p_bq = $('#log').children();
-                     for(var i=1;i<100;i++){
-                           p_bq[i].remove();
-                       }
-                   }
-                window.setTimeout(new_ajax,1000);
-              }
-            }
-          }
-         }
         })
       }
       {% end %}
+
+      var status_run = true;
+
+        (function () {
+            ws.onopen = function (p1) {			
+            console.log('socket open');
+            };
+            ws.onmessage = function(event) {	
+                console.log(event);
+                for(var i=0;i<JSON.parse(event.data)["message"].length;i++){
+                    $('#log').append('<p style="margin: 0;padding: 0">'+ JSON.parse(event.data)["message"][i] +'</p>');
+                    $('#log').scrollTop( $('#log')[0].scrollHeight );
+                    }
+            };
+            var THRESHOLD = 10240;
+            var send_message = setInterval(function(){
+             if(ws.bufferedAmount < THRESHOLD ){
+                 if(ws.readyState == WebSocket.OPEN) {
+                     ws.send('aaa');
+                 }else {
+                     console.log("web socket colse!");
+                     clearInterval(send_message);
+                 }
+         
+                 }
+             },1000);
+         })();
 
       function check_host(){
         $('#new_log').text('正在检查主机连通性...')

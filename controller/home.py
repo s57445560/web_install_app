@@ -11,6 +11,7 @@ import os.path,copy
 import pickle
 import threading
 import ConfigParser
+import tornado.websocket
 
 from tornado.concurrent import Future
 from tornado import gen
@@ -179,51 +180,40 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 
-class MessageNewHandler(tornado.web.RequestHandler):                        # 前端POST发送信息的类
+class MessageNewHandler(tornado.websocket.WebSocketHandler):                        # 前端POST发送信息的类
+    clients = set()
 
     def initialize(self):
         self.session_obj = Session(self)
 
-    def post(self):
-        web_status = 'yes'
-        message = self.get_argument('message',None)
-        path = 'log/tornado.log'
+    def open(self):						# 客户端打开websocket的时候调用此函数
+        self.num = 0
+        self.status = True
+        print('open')
+        MessageNewHandler.clients.add(self)
+
+    def on_close(self):						# 关闭请求的时候调用此函数
+        MessageNewHandler.clients.remove(self)
+        self.status = False
+
+
+    def on_message(self, message):				# 当发过来客户端 send请求的时候才调用此函数
         log_list = []
-        global pid
-        if pid == 1:
-            try:
-                os.remove("log/run.pid")
-            except:
-                pass
-            print('RRRRRRRRR_ ',os.path.exists("log/run.pid"))
-        pid += 1 
-        status = False
-        print('MMMMMMM_ ',os.path.exists("log/run.pid"))
-        if os.path.exists("log/run.pid"):
-            pid = 1
-            print('true')
-            with open("log/run.pid",'rb') as f:
-                file_num = f.read()
-            print(file_num,"file_num")
-            install_cookie = self.session_obj.get_seesion('install_cookie')
-            install_cookie[str(file_num.rstrip())] = 1
-            self.session_obj.set_seesion('install_cookie',install_cookie)
-            status = True
-        global num
-        time.sleep(2)
-        with open(path,'rb') as sun_file:
-            sun_file.seek(num)
-            for i in sun_file:
+        print('send',message)
+        file_num = self.session_obj.get_seesion('file_num')
+        if file_num == None:
+            file_num = 0
+        with open('log/tornado.log', 'r') as w_file:
+            w_file.seek(file_num)
+            for i in w_file:
                 log_list.append(i.rstrip())
-            num = sun_file.tell()
-            if not log_list:
-                web_status = True
-            global message_list
-            message_list.extend(log_list)
-            message_num = len(message_list)
-            if message_num > 200:
-                message_list = message_list[message_num - 200::]
-            self.write(json.dumps({'status':status,'messages':log_list,'web_status':web_status}))
+            self.session_obj.set_seesion('file_num', w_file.tell())
+        global message_list
+        message_list.extend(log_list)
+        message_num = len(message_list)
+        if message_num > 200:
+            message_list = message_list[message_num - 200::]
+        self.write_message(json.dumps({"message":log_list}))
 
 
 
@@ -254,8 +244,8 @@ class Checkhost(tornado.web.RequestHandler):
 
 class Runfabric(tornado.web.RequestHandler):
 
-#    def initialize(self):
-#        self.session_obj = Session(self)
+    def initialize(self):
+        self.session_obj = Session(self)
 #    
 #    def post(self):
 #        self.num = message = self.get_argument('num',None)
@@ -271,10 +261,26 @@ class Runfabric(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def post(self):
+        install_cookie = self.session_obj.get_seesion('install_cookie')
         self.num = message = self.get_argument('num',None)
-        res = yield self.sleep()
-        self.write(json.dumps({'status':True}))
-        self.finish()
+        if int(self.num) > len(install_cookie):
+            self.write(json.dumps({'status':False}))
+        else:
+            os.system("rm -rf log/run.pid")
+            res = yield self.sleep()
+            with open("log/run.pid",'rb') as f:
+                file_num = f.read()
+            print(file_num,"file_num")
+            install_cookie[str(file_num.rstrip())] = 1
+            self.session_obj.set_seesion('install_cookie',install_cookie)
+            jump_id = int(file_num.rstrip())+1
+            print(WEB_CONFIG[int(file_num.rstrip())-1][1])
+            if int(self.num) == len(WEB_CONFIG):
+                list_id = len(WEB_CONFIG) - 1
+            else:
+                list_id = int(file_num.rstrip())
+            self.write(json.dumps({'status':True,'id': file_num.rstrip(),'jump_id':jump_id,'web_info':WEB_CONFIG[list_id][1]}))
+            self.finish()
 
     @run_on_executor
     def sleep(self):
