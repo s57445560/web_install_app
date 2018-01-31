@@ -49,12 +49,27 @@
 {% block JavaScript %}
     <script>
         function add_tr() {
-            $("#add_tbody").append('<tr class="data_tr">'+
+            console.log("123");
+            var checkbox_list = new Array();
+            var html_str = '';
+            $(".data_tr").each(function (num) {
+                var ip = $(this).find("select option:selected").val();
+                    checkbox_list.push(ip);
+                 });
+            console.log(checkbox_list);
+            $.ajax({url: "/install/start",
+                  type: "POST",
+                  dataType: "JSON",
+                  data: {'message':'ajax','ip_list':JSON.stringify(checkbox_list)},
+                  success: function(result){
+                  if(result.status){
+                            for(var index in result.data){
+                              html_str+='<option>'+ result.data[index] +'</option>'
+                            }
+                     $("#add_tbody").append('<tr class="data_tr">'+
                         '<td style="padding-top: 23px;">'+
                            '<select class="form-control">'+
-                            {% for ip in data %}
-                              '<option>{{ip}}</option>'+
-                            {% end %}
+                            html_str +
                            '</select>'+
                         '</td>'+
                         '<td>'+
@@ -65,8 +80,11 @@
                             {% end %}
                         '</td>'+
                     '</tr>')
-                    $('#h_top').scrollTop( $('#h_top')[0].scrollHeight );
-        }
+
+             }
+            }
+            })
+        };
         function data_format() {
             var data_dic={};
             $(".data_tr").each(function (num) {

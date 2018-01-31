@@ -7,7 +7,7 @@ import hashlib
 import time
 import tornado.escape
 import uuid, json
-import os.path
+import os.path,copy
 import pickle
 import threading
 import ConfigParser
@@ -143,10 +143,12 @@ class MainHandler(tornado.web.RequestHandler):
         for key in APP_TYPE:
             app_type_dic[key] = []
         for ip in app_install.sections():
-            host_dic[ip] = app_type_dic
+            host_dic[ip] = copy.deepcopy(app_type_dic)
         for ip in host_dic.keys():
             for k,v in app_install.items(ip):
                 host_dic[ip][v].append(k)
+                print(ip,k,v)
+            print("--------------")
         install_cookie = self.session_obj.get_seesion('install_cookie')
         if not install_cookie:
             install_cookie = cookie_dic
@@ -162,6 +164,7 @@ class MainHandler(tornado.web.RequestHandler):
                     ip_status[ip] = 0
             self.session_obj.set_seesion('ip_status',ip_status)
         print(install_cookie)
+        print(host_dic)
         for num in range(1,len(install_cookie)+1):
             if install_cookie[str(num)] == 0:
                 install_num = num - 1

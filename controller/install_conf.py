@@ -29,7 +29,6 @@ APP_CODE = settings.APP_CODE
 APP_INSTALL_CONFIG = settings.APP_INSTALL_CONFIG
 INFORMATION = settings.INFORMATION
 container = {}
-ip_list = []
 
 
 
@@ -119,15 +118,12 @@ class Install_ip(tornado.web.RequestHandler):
                 if i == 0:
                     print(data[start:end])
                     ip_file.write(' '.join(data[start:end])+"\n")
-                    ip_list.append(data[start:end][0])
                 else:
                     start = start + 3
                     end = end + 3
                     ip_file.write(' '.join(data[start:end])+"\n")
-                    ip_list.append(data[start:end][0])
                     print(data[start:end])
             ip_file.close()
-        print(data,ip_list)
         self.write(json.dumps({'status':status}))
 
 
@@ -154,29 +150,44 @@ class Install_app_ip(tornado.web.RequestHandler):
 
 class Install_install(tornado.web.RequestHandler):
     def initialize(self):
-        self.session_obj = Session(self)
+        self.ip_list = []
+        with open('ip.conf') as f:
+            for line in f:
+                line_list = line.split()
+                if line_list:
+                    self.ip_list.append(line_list[0])
 
     def get(self):
         id_list = range(1,len(APP_CODE)+1)
-        self.render('install_install.html',data=ip_list,app_code=APP_CODE,id_list=id_list,information=INFORMATION)
+        self.render('install_install.html',data=self.ip_list,app_code=APP_CODE,id_list=id_list,information=INFORMATION)
 
     def post(self):
-        app_install = myconf()
-        app_install.read('conf/install.conf')                                                                                                                
-        status = False
+        return_status = True
         message = self.get_argument('message', None)
-        if message:
-            message = json.loads(message)
-            print(message)
-            for i in app_install.sections():
-                app_install.remove_section(i)
-                app_install.write(open("conf/install.conf", "w"))
-            for key in message.keys():
-                if message[key]:
-                    app_install.add_section(key)
-                    for app_num in message[key]:
-                        app_install.set(key, APP_CODE[app_num][0], APP_CODE[app_num][1]) 
-            app_install.write(open("conf/install.conf", "w")) 
-            status = True
-        self.write(json.dumps({'status':status}))
+        if message == "ajax":
+            check_ip_list = self.get_argument('ip_list', None)
+            select_ip_list = json.loads(check_ip_list)
+            return_ip = list(set(self.ip_list) - set(select_ip_list))
+            if not return_ip:
+                return_status = False
+            self.write(json.dumps({'data':return_ip,'status':return_status}))
+        else: 
+            app_install = myconf()
+            app_install.read('conf/install.conf')                                                                                                                
+            status = False
+            message = self.get_argument('message', None)
+            if message:
+                message = json.loads(message)
+                print(message)
+                for i in app_install.sections():
+                    app_install.remove_section(i)
+                    app_install.write(open("conf/install.conf", "w"))
+                for key in message.keys():
+                    if message[key]:
+                        app_install.add_section(key)
+                        for app_num in message[key]:
+                            app_install.set(key, APP_CODE[app_num][0], APP_CODE[app_num][1]) 
+                app_install.write(open("conf/install.conf", "w")) 
+                status = True
+            self.write(json.dumps({'status':status}))
 
