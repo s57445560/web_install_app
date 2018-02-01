@@ -238,7 +238,7 @@ def supp():
 def web():
     web_all = []
     config_nginx = False
-# 查看本机器是否需要安装 web程序
+    # 查看本机器是否需要安装 web程序
     if env.host not in app_install.sections():
         return 'exit'
 

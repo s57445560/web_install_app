@@ -36,7 +36,7 @@ container = {}
 message_list = ['欢迎使用部署系统']
 num = 0
 pid = 1
-join_str = '>>log/tornado.log 2>&1;sleep 3;echo "{number}" > log/run.pid'
+join_str = '>>log/tornado.log 2>&1;sleep 2;echo "{number}" > log/run.pid'
 run_dict = {
     'check':'fab -f install.py test callback >>/dev/null;',
 }
@@ -148,7 +148,6 @@ class MainHandler(tornado.web.RequestHandler):
         for ip in host_dic.keys():
             for k,v in app_install.items(ip):
                 host_dic[ip][v].append(k)
-                print(ip,k,v)
             print("--------------")
         install_cookie = self.session_obj.get_seesion('install_cookie')
         if not install_cookie:
@@ -174,13 +173,13 @@ class MainHandler(tornado.web.RequestHandler):
             install_num = num - 1
             install_status = False
         self.render('index.html',ip_status=ip_status, install_cookie=install_cookie,message_log=message_list,host_dic=host_dic,web_left=web_left,app_type=APP_TYPE,
-                                              web_right=web_right,web_config=WEB_CONFIG,install_num=install_num,install_status=install_status,information=INFORMATION)
+                                 web_right=web_right,web_config=WEB_CONFIG,install_num=install_num,install_status=install_status,information=INFORMATION)
 
 
 
 
 
-class MessageNewHandler(tornado.websocket.WebSocketHandler):                        # 前端POST发送信息的类
+class MessageNewHandler(tornado.websocket.WebSocketHandler):                        # websocket 处理
     clients = set()
 
     def initialize(self):
@@ -189,17 +188,17 @@ class MessageNewHandler(tornado.websocket.WebSocketHandler):                    
     def open(self):						# 客户端打开websocket的时候调用此函数
         self.num = 0
         self.status = True
-        print('open')
+        print('websocket open!')
         MessageNewHandler.clients.add(self)
 
     def on_close(self):						# 关闭请求的时候调用此函数
         MessageNewHandler.clients.remove(self)
+        print('websocket close!')
         self.status = False
 
 
     def on_message(self, message):				# 当发过来客户端 send请求的时候才调用此函数
         log_list = []
-        print('send',message)
         file_num = self.session_obj.get_seesion('file_num')
         if file_num == None:
             file_num = 0
@@ -242,7 +241,7 @@ class Checkhost(tornado.web.RequestHandler):
         self.write(json.dumps({'status':True}))
 
 
-class Runfabric(tornado.web.RequestHandler):
+class Runfabric(tornado.web.RequestHandler): # 异步处理
 
     def initialize(self):
         self.session_obj = Session(self)
@@ -270,11 +269,9 @@ class Runfabric(tornado.web.RequestHandler):
             res = yield self.sleep()
             with open("log/run.pid",'rb') as f:
                 file_num = f.read()
-            print(file_num,"file_num")
             install_cookie[str(file_num.rstrip())] = 1
             self.session_obj.set_seesion('install_cookie',install_cookie)
             jump_id = int(file_num.rstrip())+1
-            print(WEB_CONFIG[int(file_num.rstrip())-1][1])
             if int(self.num) == len(WEB_CONFIG):
                 list_id = len(WEB_CONFIG) - 1
             else:

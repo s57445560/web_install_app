@@ -5,6 +5,7 @@
 欢迎大家可以提出宝贵意见。
 
 使用torando 与 fabric结合
+前台日志使用websocket
 
 ```
 [fabric 文档](http://fabric-chs.readthedocs.io/zh_CN/chs/tutorial.html "fabric 文档") 
@@ -62,6 +63,8 @@ WEB_CONFIG = [
 # 次修改的配置文件是 conf/app_ip.conf
 #
 # 列表内的含义[ 配置文件的key, 页面上的中文解释 ]
+# 这些配置文件 用fabric来分发程序配置脚本 script/config_c.sh 里面可以跟配置参数，如需要请自行配置
+
 
 APP_INSTALL_CONFIG = [
     ['local_redis','本地redis地址'],

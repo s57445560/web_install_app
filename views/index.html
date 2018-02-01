@@ -188,7 +188,7 @@
         </div>
     </div>
     <script>
-      var ws = new WebSocket("ws://192.168.2.192:9999/message/new");
+      var ws = new WebSocket("ws://"+ window.location.host +"/message/new");
       $(function(){
          $('#log').scrollTop( $('#log')[0].scrollHeight );
        });
@@ -226,7 +226,6 @@
                 $("#id" + result.id).addClass('glyphicon-ok');
                 $('span[sun_web="ok"]').attr({'id':result.jump_id});
                 $('span[sun_web="ok"]').text(result.web_info);
-                console.log('1');
             }else{
                 window.location.reload();
              }
@@ -242,7 +241,6 @@
             console.log('socket open');
             };
             ws.onmessage = function(event) {	
-                console.log(event);
                 for(var i=0;i<JSON.parse(event.data)["message"].length;i++){
                     $('#log').append('<p style="margin: 0;padding: 0">'+ JSON.parse(event.data)["message"][i] +'</p>');
                     $('#log').scrollTop( $('#log')[0].scrollHeight );

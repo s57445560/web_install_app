@@ -12,12 +12,13 @@ WEB_CONFIG = [
     [1,"查看网卡", "fab -f install.py ifconfig"],
     [2,"查看pwd", "fab -f install.py pwd"],
     [3,"查看/root/ls", "fab -f install.py ls"],
-    [4,"查看主机hostname", "fab -f install.py hm"]
+    [4,"查看主机hostname", "fab -f install.py hm"],
 
 ]
 
 
 # 安装应用所需要的配置文件信息
+# conf/app_ip.conf 有需要的可以用此配置文件来修改程序的配置
 
 APP_INSTALL_CONFIG = [
     ['local_redis','本地redis地址'],
@@ -25,7 +26,6 @@ APP_INSTALL_CONFIG = [
     ['kafka', 'kafka所有地址'],
     ['zookeeper','zookeeper所有ip地址'],
     ['flume','flume其中一台ip地址'],
-
 ]
 
 
