@@ -146,7 +146,11 @@
                   </thead>
                  {% for line in web_left %}
                  <tbody >
+                 {% if line[0]%2 == 1 %}
+                    <tr class="success">
+                 {% else %}
                     <tr >
+                 {% end %}
                          <td  style="padding: 0">{{line[0]}}</td>
                          <td style="padding: 0">{{line[1]}}</td>
                          {% if install_cookie[str(line[0])] == 0 %}
@@ -173,7 +177,11 @@
                   </thead>
                 {% for line in web_right %}
                 <tbody>
+                 {% if line[0]%2 == 1 %}
+                    <tr class="success">
+                 {% else %}
                     <tr >
+                 {% end %}
                          <td style="padding: 0">{{line[0]}}</td>
                          <td style="padding: 0">{{line[1]}}</td>
                          {% if install_cookie[str(line[0])] == 0 %}
