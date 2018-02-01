@@ -64,6 +64,8 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     application.listen(9999)
     # epoll + socket
+    print('\033[31m%s\033[0m'%"-"*45)
     print('\033[31m***** please open http://ip:9999/install **** \033[0m')
+    print('\033[31m%s\033[0m'%"-"*45)
     tornado.ioloop.IOLoop.instance().start()
 
