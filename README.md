@@ -2,10 +2,10 @@
 
 ```
 有什么问题可以联系我 QQ：247435333
-欢迎大家可以提出宝贵意见。
+欢迎大家提出宝贵意见。
 
 使用torando 与 fabric结合
-前台日志使用websocket
+前台日志使用websocket (之前版本使用的是长轮询)
 
 ```
 [fabric 文档](http://fabric-chs.readthedocs.io/zh_CN/chs/tutorial.html "fabric 文档") 
