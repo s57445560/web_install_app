@@ -211,9 +211,12 @@
       };
       {% if install_status %}
       function run_fabric(){
+        var num = $('span[sun_web="ok"]').attr('id');
+        if(num == "nojump"){
+            return;
+        };
         $('#start').css('display','none');
         $('#stop').css('display','block');
-        var num = $('span[sun_web="ok"]').attr('id');
         var obj = document.getElementById("c1");
         var obj2 = document.getElementById('c2');
         obj.classList.remove("hide");
@@ -286,6 +289,9 @@
 
      function jump(){
         var num = $('span[sun_web="ok"]').attr('id');
+        if(num == "nojump"){
+            return;
+        };
         $.ajax({
           url:'/check/host',
           'type':'GET',

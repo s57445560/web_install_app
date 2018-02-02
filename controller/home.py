@@ -173,7 +173,7 @@ class MainHandler(tornado.web.RequestHandler):
             install_num = num - 1
             install_status = False
         self.render('index.html',ip_status=ip_status, install_cookie=install_cookie,message_log=message_list,host_dic=host_dic,web_left=web_left,app_type=APP_TYPE,
-                                 web_right=web_right,web_config=WEB_CONFIG,install_num=install_num,install_status=install_status,information=INFORMATION)
+                    web_right=web_right,web_config=WEB_CONFIG,install_num=install_num,install_status=install_status,information=INFORMATION,session=self.session_obj)
 
 
 
@@ -234,8 +234,10 @@ class Checkhost(tornado.web.RequestHandler):
         self.write(json.dumps({'status':status}))
 
     def get(self):
-        install_cookie = self.session_obj.get_seesion('install_cookie')
         message = self.get_argument('message',None)
+        if message == "nojump":
+            return
+        install_cookie = self.session_obj.get_seesion('install_cookie')
         install_cookie[message] = 1
         self.session_obj.set_seesion('install_cookie',install_cookie)
         self.write(json.dumps({'status':True}))
@@ -260,27 +262,32 @@ class Runfabric(tornado.web.RequestHandler): # 异步处理
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def post(self):
-        install_cookie = self.session_obj.get_seesion('install_cookie')
         self.num = message = self.get_argument('num',None)
-        if int(self.num) > len(install_cookie):
-            self.write(json.dumps({'status':False}))
+        if self.num == "nojump":
+            return
+        install_cookie = self.session_obj.get_seesion('install_cookie')
+        os.system("rm -rf log/run.pid")
+        res = yield self.sleep()
+        with open("log/run.pid",'rb') as f:
+            file_num = f.read()
+        install_cookie[str(file_num.rstrip())] = 1
+        self.session_obj.set_seesion('install_cookie',install_cookie)
+        jump_id = int(file_num.rstrip())+1
+
+        if int(self.num) == len(WEB_CONFIG):
+            list_id = len(WEB_CONFIG) - 1
         else:
-            os.system("rm -rf log/run.pid")
-            res = yield self.sleep()
-            with open("log/run.pid",'rb') as f:
-                file_num = f.read()
-            install_cookie[str(file_num.rstrip())] = 1
-            self.session_obj.set_seesion('install_cookie',install_cookie)
-            jump_id = int(file_num.rstrip())+1
-            if int(self.num) == len(WEB_CONFIG):
-                list_id = len(WEB_CONFIG) - 1
-            else:
-                list_id = int(file_num.rstrip())
-            self.write(json.dumps({'status':True,'id': file_num.rstrip(),'jump_id':jump_id,'web_info':WEB_CONFIG[list_id][1]}))
-            self.finish()
+            list_id = int(file_num.rstrip())
+
+        if jump_id > len(install_cookie):
+            jump_id = "nojump"
+            web_info = "全部执行完毕"
+        else:
+            web_info = WEB_CONFIG[list_id][1]
+        self.write(json.dumps({'status':True,'id': file_num.rstrip(),'jump_id':jump_id,'web_info':web_info}))
+        self.finish()
 
     @run_on_executor
     def sleep(self):
-        self.num = message = self.get_argument('num',None)
         os.system(run_dict[self.num])
         return True
