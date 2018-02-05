@@ -141,5 +141,5 @@ APP_TYPE = {
 
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install05.png)
 
-![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install06.png)
+![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install07.png)
 

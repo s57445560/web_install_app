@@ -1,0 +1,111 @@
+192.168.2.192
+[root@192.168.2.182] Executing task 'ifconfig'
+[root@192.168.2.182] run: ifconfig
+[root@192.168.2.182] out: eth0      Link encap:Ethernet  HWaddr 00:50:56:84:03:D0  
+[root@192.168.2.182] out:           inet addr:192.168.2.182  Bcast:192.168.2.255  Mask:255.255.255.0
+[root@192.168.2.182] out:           inet6 addr: fe80::250:56ff:fe84:3d0/64 Scope:Link
+[root@192.168.2.182] out:           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+[root@192.168.2.182] out:           RX packets:194722150 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.182] out:           TX packets:169447855 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.182] out:           collisions:0 txqueuelen:1000 
+[root@192.168.2.182] out:           RX bytes:125066149385 (116.4 GiB)  TX bytes:100964203085 (94.0 GiB)
+[root@192.168.2.182] out: 
+[root@192.168.2.182] out: eth1      Link encap:Ethernet  HWaddr 00:50:56:84:66:18  
+[root@192.168.2.182] out:           inet addr:192.168.1.65  Bcast:192.168.1.255  Mask:255.255.255.0
+[root@192.168.2.182] out:           inet6 addr: fe80::250:56ff:fe84:6618/64 Scope:Link
+[root@192.168.2.182] out:           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+[root@192.168.2.182] out:           RX packets:28753250 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.182] out:           TX packets:26646467 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.182] out:           collisions:0 txqueuelen:1000 
+[root@192.168.2.182] out:           RX bytes:6463690347 (6.0 GiB)  TX bytes:34166553246 (31.8 GiB)
+[root@192.168.2.182] out: 
+[root@192.168.2.182] out: lo        Link encap:Local Loopback  
+[root@192.168.2.182] out:           inet addr:127.0.0.1  Mask:255.0.0.0
+[root@192.168.2.182] out:           inet6 addr: ::1/128 Scope:Host
+[root@192.168.2.182] out:           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+[root@192.168.2.182] out:           RX packets:139148348 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.182] out:           TX packets:139148348 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.182] out:           collisions:0 txqueuelen:0 
+[root@192.168.2.182] out:           RX bytes:10113520542 (9.4 GiB)  TX bytes:10113520542 (9.4 GiB)
+[root@192.168.2.182] out: 
+[root@192.168.2.182] out: 
+
+[root@192.168.2.193] Executing task 'ifconfig'
+[root@192.168.2.193] run: ifconfig
+[root@192.168.2.193] out: eth0      Link encap:Ethernet  HWaddr 00:50:56:8B:B0:66  
+[root@192.168.2.193] out:           inet addr:192.168.2.193  Bcast:192.168.2.255  Mask:255.255.255.0
+[root@192.168.2.193] out:           inet6 addr: fe80::250:56ff:fe8b:b066/64 Scope:Link
+[root@192.168.2.193] out:           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+[root@192.168.2.193] out:           RX packets:994378356 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.193] out:           TX packets:1058216785 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.193] out:           collisions:0 txqueuelen:1000 
+[root@192.168.2.193] out:           RX bytes:84763724811 (78.9 GiB)  TX bytes:95653047836 (89.0 GiB)
+[root@192.168.2.193] out: 
+[root@192.168.2.193] out: eth1      Link encap:Ethernet  HWaddr 00:50:56:8B:23:6E  
+[root@192.168.2.193] out:           inet addr:192.168.1.63  Bcast:192.168.1.255  Mask:255.255.255.0
+[root@192.168.2.193] out:           inet6 addr: fe80::250:56ff:fe8b:236e/64 Scope:Link
+[root@192.168.2.193] out:           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+[root@192.168.2.193] out:           RX packets:230864491 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.193] out:           TX packets:242392337 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.193] out:           collisions:0 txqueuelen:1000 
+[root@192.168.2.193] out:           RX bytes:15044366019 (14.0 GiB)  TX bytes:15199782415 (14.1 GiB)
+[root@192.168.2.193] out: 
+[root@192.168.2.193] out: lo        Link encap:Local Loopback  
+[root@192.168.2.193] out:           inet addr:127.0.0.1  Mask:255.0.0.0
+[root@192.168.2.193] out:           inet6 addr: ::1/128 Scope:Host
+[root@192.168.2.193] out:           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+[root@192.168.2.193] out:           RX packets:22923959 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.193] out:           TX packets:22923959 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.193] out:           collisions:0 txqueuelen:0 
+[root@192.168.2.193] out:           RX bytes:2656816819 (2.4 GiB)  TX bytes:2656816819 (2.4 GiB)
+[root@192.168.2.193] out: 
+[root@192.168.2.193] out: 
+
+[root@192.168.2.183] Executing task 'ifconfig'
+[root@192.168.2.183] run: ifconfig
+[root@192.168.2.183] out: eth0      Link encap:Ethernet  HWaddr 00:50:56:8B:5E:F7  
+[root@192.168.2.183] out:           inet addr:192.168.2.183  Bcast:192.168.2.255  Mask:255.255.255.0
+[root@192.168.2.183] out:           inet6 addr: fe80::250:56ff:fe8b:5ef7/64 Scope:Link
+[root@192.168.2.183] out:           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+[root@192.168.2.183] out:           RX packets:824522166 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.183] out:           TX packets:798277501 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.183] out:           collisions:0 txqueuelen:1000 
+[root@192.168.2.183] out:           RX bytes:498343592219 (464.1 GiB)  TX bytes:184199149115 (171.5 GiB)
+[root@192.168.2.183] out: 
+[root@192.168.2.183] out: lo        Link encap:Local Loopback  
+[root@192.168.2.183] out:           inet addr:127.0.0.1  Mask:255.0.0.0
+[root@192.168.2.183] out:           inet6 addr: ::1/128 Scope:Host
+[root@192.168.2.183] out:           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+[root@192.168.2.183] out:           RX packets:45334628 errors:0 dropped:0 overruns:0 frame:0
+[root@192.168.2.183] out:           TX packets:45334628 errors:0 dropped:0 overruns:0 carrier:0
+[root@192.168.2.183] out:           collisions:0 txqueuelen:0 
+[root@192.168.2.183] out:           RX bytes:2370511085 (2.2 GiB)  TX bytes:2370511085 (2.2 GiB)
+[root@192.168.2.183] out: 
+[root@192.168.2.183] out: 
+
+
+Done.
+Disconnecting from 192.168.2.193... done.
+Disconnecting from 192.168.2.182... done.
+Disconnecting from 192.168.2.183... done.
+192.168.2.192
+[root@192.168.2.182] Executing task 'pwd'
+[root@192.168.2.182] run: pwd
+[root@192.168.2.182] out: /root
+[root@192.168.2.182] out: 
+
+[root@192.168.2.193] Executing task 'pwd'
+[root@192.168.2.193] run: pwd
+[root@192.168.2.193] out: /root
+[root@192.168.2.193] out: 
+
+[root@192.168.2.183] Executing task 'pwd'
+[root@192.168.2.183] run: pwd
+[root@192.168.2.183] out: /root
+[root@192.168.2.183] out: 
+
+
+Done.
+Disconnecting from 192.168.2.193... done.
+Disconnecting from 192.168.2.182... done.
+Disconnecting from 192.168.2.183... done.
