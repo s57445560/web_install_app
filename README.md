@@ -116,7 +116,7 @@ APP_INSTALL_CONFIG = [
 #### 配置应用安装选择 
 
 ```
-# 次修改的配置文件是 conf/install.conf
+# 此修改的配置文件是 conf/install.conf
 # 
 # 配置要在 /install/start 安装的应用名称，用包名来定义，并且分类
 # 
