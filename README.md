@@ -14,19 +14,19 @@
 ---
 
 ## 安装与运行方法
-		cd install/python27
-		bash python_install.sh
-		# 启动方法
-		# python app.py
-		# http://192.168.2.192:9999/install  配置 ip.conf文件 页面 (开始页)
-		# http://192.168.2.192:9999/install/app_ip 配置 conf/app_ip.conf
-		# http://192.168.2.192:9999/install/start 配置 conf/install.conf
-		# http://192.168.2.192:9999 主安装页面
-		# 前面url的打开顺序没有做限制，可以根据需求打开
-		#
-		# 如果使用页面配置方式，对文件编辑熟悉规则的话可以直接编辑如下3个文件：
-		#     ip.conf conf/app_ip.conf conf/install.conf
-		# 这样可以直接进入http://192.168.2.192:9999 安装页面
+	cd install/python27
+	bash python_install.sh
+	# 启动方法
+	# python app.py
+	# http://192.168.2.192:9999/install  配置 ip.conf文件 页面 (开始页)
+	# http://192.168.2.192:9999/install/app_ip 配置 conf/app_ip.conf
+	# http://192.168.2.192:9999/install/start 配置 conf/install.conf
+	# http://192.168.2.192:9999 主安装页面
+	# 前面url的打开顺序没有做限制，可以根据需求打开
+	#
+	# 如果使用页面配置方式，对文件编辑熟悉规则的话可以直接编辑如下3个文件：
+	#     ip.conf conf/app_ip.conf conf/install.conf
+	# 这样可以直接进入http://192.168.2.192:9999 安装页面
 
 
 ---
