@@ -10,6 +10,7 @@ import logging
 import socket
 import re
 import pickle
+from src.method import dir
 
 
 

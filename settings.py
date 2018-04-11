@@ -30,7 +30,7 @@ APP_INSTALL_CONFIG = [
 
 
 # 要在 /install/start 安装的应用名称，用包名来定义，并且分类
-# 
+# 修改的是 conf/install.conf 配置文件
 # supp 是存放java服务器目录
 # web 是存放web相关的服务
 # comm 存放前置机类型服务
@@ -56,6 +56,16 @@ APP_CODE = {
     '10': ['plat_gb_cli','comm'],
     '11': ['redis','mid'],
     '12': ['sunyang','mid']
+}
+
+# 目录对应关系
+APP_DIR = {
+
+    'mid':'/opt/mid_app',
+    'supp': '/opt/supp_app',
+    'web': '/opt/web_app',
+    'comm': '/opt/comm_app'
+
 }
 
 

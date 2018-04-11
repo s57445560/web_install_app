@@ -29,6 +29,32 @@
 		# 这样可以直接进入http://192.168.2.192:9999 安装页面
 
 
+---
+## fabric使用规则
+
+### 定义一个新fabric任务
+```
+@task
+def comm():
+    if env.host not in app_install.sections():       # 这里是来判断循环到的服务器是否有应用安装，如果没有则return退出。
+        return 'exit'				     # 如果有不在install.conf配置文件内的服务器安装逻辑，请在return退出前定义内容。
+    for app,dir_type in app_install.items(env.host): # 循环本台机器需要安装的应用 app 为应用名，dir_type应用的目录类型。
+        dir(dir_type,mkdir=True)                     # 创建应用的目录
+        if app == 'comm':			     # 是comm应用时 做什么操作，自己定义				
+            pass
+        if app == 'lvs':			     # 是lvs应用时 做什么操作，自己定义
+            pass
+```
+
+### src/method.py 是用来写通用方法的
+
+#### 方法一
+		dir(dir_type,mkdir=True)	    # dir_type是目录类型，mid,supp,web,comm 等 mkdir默认等于False，如果需要创建这个目录时设为True
+		                                    # return dir_type 设置的绝对路径
+
+		dir(dir_type,'es/conf/es.conf')     # 也可以作为目录拼接，需要应用的绝对路径时使用，第一个参数是 目录类型，第二个参数是 应用的相对路径
+						    # return 拼接后的绝对路径
+
 #### 配置登陆服务器地址
 
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install01.png)
@@ -114,6 +140,16 @@ APP_CODE = {
     '10': ['plat_gb_cli','comm'],
     '11': ['redis','mid'],
     '12': ['sunyang','mid']
+}
+
+# 目录对应关系
+APP_DIR = {
+
+    'mid':'/opt/mid_app',
+    'supp': '/opt/supp_app',
+    'web': '/opt/web_app',
+    'comm': '/opt/comm_app'
+
 }
 ```
 ![image](https://github.com/s57445560/img-all/raw/master/web_install/web_install03.png)
