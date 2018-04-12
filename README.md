@@ -32,7 +32,7 @@
 ---
 ## fabric使用规则
 
-### 定义一个新fabric任务
+### 定义一个新fabric 应用安装任务
 ```
 @task
 def comm():
@@ -40,6 +40,7 @@ def comm():
 	return 'exit'				     # 如果没有则return退出。
 						     # 如果有不在install.conf配置文件内的服务器安装逻辑,
 						     # 请在return退出前定义内容。
+						     # 如果就是全体主机都执行 那么可以不定义此项
 
     for app,dir_type in app_install.items(env.host): # 本台机器需要安装应用,app为应用名,dir_type应用的目录类型。
         dir(dir_type,mkdir=True)                     # 创建应用的目录
