@@ -46,6 +46,9 @@
     <link href="{{static_url("bootstrap/dist/css/bootstrap.min.css")}}" rel="stylesheet">
     <script src="{{static_url("jquery-3.0.0.js")}}"></script>
     <script src="{{static_url("bootstrap/dist/js/bootstrap.min.js")}}"></script>
+    <link href="{{static_url("index.css")}}" rel="stylesheet">
+    <script src="{{static_url("vue.min.js")}}"></script>
+    <script src="{{static_url("index.js")}}"></script>
 </head>
 <body>
     <div id="c2" class="hide" style="background-color: black;position: fixed;top: 0;left: 0;bottom: 0;right: 0;opacity: 0.3;z-index:5;">
@@ -196,6 +199,10 @@
         </div>
     </div>
     <script>
+      var vue=new Vue({
+          el:'#start',
+
+      })
       var ws = new WebSocket("ws://"+ window.location.host +"/message/new");
       $(function(){
          $('#log').scrollTop( $('#log')[0].scrollHeight );
@@ -217,10 +224,12 @@
         };
         $('#start').css('display','none');
         $('#stop').css('display','block');
-        var obj = document.getElementById("c1");
-        var obj2 = document.getElementById('c2');
-        obj.classList.remove("hide");
-        obj2.classList.remove("hide");
+        const loading = vue.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        });
         console.log('fabric... running!');
         $.ajax({
           url:'/run/fabric',
@@ -231,8 +240,7 @@
             if(result.status){
                 $('#start').css('display','block');
                 $('#stop').css('display','none');
-                obj.classList.add("hide");
-                obj2.classList.add("hide");
+                loading.close();
                 $("#id" + result.id).removeClass('glyphicon-remove');
                 $("#id" + result.id).addClass('glyphicon-ok');
                 $('span[sun_web="ok"]').attr({'id':result.jump_id});
