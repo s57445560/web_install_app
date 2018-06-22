@@ -55,7 +55,7 @@ else:
 
 WEB_CONFIG_COUNT = 1
 for line in WEB_CONFIG:
-    run_dict[str(line[0])] = "".join([line[2],join_str.format(number=line[0])])
+    run_dict[str(line[0])] = "".join(["unbuffer ",line[2],join_str.format(number=line[0])])
     cookie_dic[str(line[0])] = 0
     if WEB_CONFIG_COUNT <= left:
         web_left.append(line)
