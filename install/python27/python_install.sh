@@ -3,7 +3,7 @@
 pwd=`pwd`
 
 
-yum install gcc zlib-devel openssl-devel readline-devel sqlite-devel sqlite2-devel build-essential libssl-devel libffi-devel -y
+yum install gcc zlib-devel openssl-devel readline-devel sqlite-devel sqlite2-devel build-essential libssl-devel libffi-devel expect -y
 
 cd Python-2.7.12
 
