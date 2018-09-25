@@ -26,10 +26,12 @@
 
     {% block RenderBody %}{% end %}
 
-    <div style="position:absolute;bottom:0;right:0;left:0;background-color:#479AC7;height: 100px;">
-        <div style="padding-left: 950px;line-height: 100px;">
+    <div class="row">
+       <div class="col-md-12" style="position:absolute;bottom:0;right:0;left:0;background-color:#479AC7;height: 80px;">
+        <div class="col-md-2 col-md-offset-9" style="margin-top:30px;">
             <button type="button"  class="btn btn-success" onclick="data_format(this);">（提交）下一步</button>
         </div>
+       </div>
     </div>
     {% block JavaScript %}{% end %}
 

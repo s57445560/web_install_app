@@ -1,23 +1,21 @@
 {% extends 'temp_install.html'%}
 
 {% block RenderBody %}
-    <div id="h_top" class="container" style="width: 900px;height: 470px;overflow: auto;">
+    <div id="h_top" class="container">
         <blockquote class="blockquote-reverse">
           <p style="color: #528CE0">请填写服务器所需要安装的程序</p>
           <footer>勾选需要安装的应用程序</footer>
+                           <div style="margin-top:10px;">
+                             <button type="button" class="btn btn-success btn-sm" onclick="add_tr(this);">点击添加主机<span class="glyphicon glyphicon-plus"></span>
+                             </button>
+                           <div>
         </blockquote>
-        <div id="td_list" >
+        <div id="td_list" style="position:absolute;bottom:90px;top:185px;right:12%;left:12%;overflow: auto;">
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th style="width: 220px">主机ip</th>
                         <th style="width: 620px">安装程序</th>
-                        <th>
-                           <div class="c1">
-                               <button type="button" class="btn btn-success btn-sm" onclick="add_tr(this);">点击添加主机<span class="glyphicon glyphicon-plus"></span>
-                               </button>
-                           <div>
-                        </th>
                     </tr>
                 </thead>
                 <tbody id="add_tbody">
